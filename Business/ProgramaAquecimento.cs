@@ -6,14 +6,13 @@ public class ProgramaAquecimento
     public string Alimento { get; }
     public int TempoSegundos { get; }
     public int Potencia { get; }
-    public string CaractereAquecimento { get; }
+    public char CaractereAquecimento { get; }
     public string Instrucoes { get; }
-    public bool Customizado { get; }
 
     public ProgramaAquecimento(string nome, string alimento, int tempo, int potencia,
-                              string caractere, string instrucoes = "", bool customizado = false)
+                              char caractere, string instrucoes = "")
     {
-        ValidarCaractere(caractere);
+        ValidarParametros(tempo, potencia, caractere);
 
         Nome = nome;
         Alimento = alimento;
@@ -21,12 +20,17 @@ public class ProgramaAquecimento
         Potencia = potencia;
         CaractereAquecimento = caractere;
         Instrucoes = instrucoes;
-        Customizado = customizado;
     }
 
-    private static void ValidarCaractere(string caractere)
+    private void ValidarParametros(int tempo, int potencia, char caractere)
     {
-        if (caractere.Length != 1 || caractere == ".")
-            throw new ArgumentException("Caractere inválido! Deve ser único e diferente de '.'");
+        if (tempo < 1)
+            throw new ArgumentException("Tempo inválido");
+
+        if (potencia < 1 || potencia > 10)
+            throw new ArgumentException("Potência inválida");
+
+        if (caractere == '.' || char.IsWhiteSpace(caractere))
+            throw new ArgumentException("Caractere inválido para programas pré-definidos");
     }
 }

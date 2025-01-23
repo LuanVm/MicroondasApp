@@ -85,19 +85,19 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Images\chicken-leg.png" />
+    <EmbeddedResource Include="Resources\Frango.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Images\popcorn.png" />
+    <EmbeddedResource Include="Resources\Pipoca.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Images\can.png" />
+    <EmbeddedResource Include="Resources\Feijao.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Images\meat.png" />
+    <EmbeddedResource Include="Resources\Carne.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Images\milk.png" />
+    <EmbeddedResource Include="Resources\Leite.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

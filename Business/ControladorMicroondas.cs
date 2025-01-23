@@ -1,61 +1,70 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 public class ControladorMicroondas : IControladorMicroondas
 {
-    private Aquecimento _aquecimentoAtual;
-    private readonly List<ProgramaAquecimento> _programasPredefinidos;
-    private readonly List<ProgramaAquecimento> _programasCustomizados;
+    public Aquecimento AquecimentoAtual { get; private set; }
+    private readonly List<ProgramaAquecimento> _programasCustomizados = new List<ProgramaAquecimento>();
 
     public ControladorMicroondas()
     {
-        _programasPredefinidos = new List<ProgramaAquecimento>
+        _programasCustomizados = new List<ProgramaAquecimento>
         {
-            new ProgramaAquecimento("Pipoca", "Pipoca (de micro-ondas)", 180, 7, "*", "Observar o barulho..."),
-            // Adicionar outros programas pré-definidos
+            new ProgramaAquecimento("Pipoca", "Pipoca (de micro-ondas)", 180, 7, '*', "Observar o barulho de estouros"),
+            new ProgramaAquecimento("Leite", "Leite", 300, 5, '~', "Cuidado com fervura instantânea"),
+            new ProgramaAquecimento("Carnes", "Carne em pedaços", 840, 4, '#', "Virar na metade do tempo"),
+            new ProgramaAquecimento("Frango", "Frango", 480, 7, '@', "Virar na metade do tempo"),
+            new ProgramaAquecimento("Feijão", "Feijão congelado", 480, 9, '&', "Recipiente destampado")
         };
-
-        _programasCustomizados = new List<ProgramaAquecimento>();
     }
 
     public void IniciarAquecimento(int tempo, int potencia)
     {
-        if (_aquecimentoAtual == null)
+        if (AquecimentoAtual == null)
         {
-            _aquecimentoAtual = new Aquecimento(tempo, potencia);
+            AquecimentoAtual = new Aquecimento(tempo, potencia);
         }
-        else if (_aquecimentoAtual.EmPausa)
+        else if (AquecimentoAtual.EmPausa)
         {
-            _aquecimentoAtual.EmPausa = false;
+            AquecimentoAtual.EmPausa = false;
         }
         else
         {
-            _aquecimentoAtual.AdicionarTempo(30);
+            AquecimentoAtual.AdicionarTempo(30);
         }
+    }
+
+    public void IniciarProgramaPredefinido(string nomePrograma)
+    {
+        var programa = _programasCustomizados.FirstOrDefault(p => p.Nome == nomePrograma);
+        if (programa != null)
+        {
+            AquecimentoAtual = new Aquecimento(programa.TempoSegundos, programa.Potencia, programa.CaractereAquecimento);
+        }
+    }
+
+    public void AdicionarProgramaCustomizado(ProgramaAquecimento programa)
+    {
+        _programasCustomizados.Add(programa);
     }
 
     public void PausarAquecimento()
     {
-        if (_aquecimentoAtual != null && !_aquecimentoAtual.Concluido)
+        if (AquecimentoAtual != null && !AquecimentoAtual.Concluido)
         {
-            _aquecimentoAtual.EmPausa = true;
+            AquecimentoAtual.EmPausa = true;
         }
     }
 
     public void CancelarAquecimento()
     {
-        _aquecimentoAtual = null;
+        AquecimentoAtual = null;
     }
 
-    public string ObterStatus()
+    public void AdicionarTempo(int segundos)
     {
-        return _aquecimentoAtual?.Atualizar() ?? "Pronto para iniciar";
+        AquecimentoAtual?.AdicionarTempo(segundos);
     }
 
-    public void AdicionarProgramaCustomizado(ProgramaAquecimento programa)
-    {
-        // Validações para caracteres únicos
-        _programasCustomizados.Add(programa);
-    }
-
-    public List<ProgramaAquecimento> ListarProgramas() => new List<ProgramaAquecimento>(_programasPredefinidos);
+    public List<ProgramaAquecimento> ListarProgramas() => new List<ProgramaAquecimento>(_programasCustomizados);
 }

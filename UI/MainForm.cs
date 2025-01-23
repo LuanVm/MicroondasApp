@@ -16,11 +16,6 @@ namespace MicroondasApp
             ConfigurarValoresPadrao();
         }
 
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-            lblMensagens.Text = "Bem-vindo ao micro-ondas!";
-        }
-
         private void ConfigurarTimer()
         {
             _timer = new Timer { Interval = 1000 };
@@ -32,15 +27,39 @@ namespace MicroondasApp
             txtPotencia.Text = "10";
         }
 
+        private void AtualizarInterface()
+        {
+            if (_controlador.AquecimentoAtual == null) return;
+
+            _controlador.AquecimentoAtual.Atualizar();
+
+            lblMensagens.Text = _controlador.AquecimentoAtual.Progresso;
+            lblTempoRestante.Text = Aquecimento.FormatarTempo(_controlador.AquecimentoAtual.TempoRestante);
+
+            if (_controlador.AquecimentoAtual.Concluido)
+            {
+                _timer.Stop();
+                btnPausarCancelar.Enabled = false;
+            }
+        }
+
         private void btnIniciar_Click(object sender, EventArgs e)
         {
             try
             {
-                var tempo = ObterTempoValido();
-                var potencia = ObterPotenciaValida();
+                if (_controlador.AquecimentoAtual?.EmPausa == true)
+                {
+                    _controlador.AquecimentoAtual.EmPausa = false;
+                    _timer.Start();
+                    return;
+                }
+
+                int tempo = ObterTempoValido();
+                int potencia = ObterPotenciaValida();
 
                 _controlador.IniciarAquecimento(tempo, potencia);
                 _timer.Start();
+                btnPausarCancelar.Enabled = true;
             }
             catch (ArgumentException ex)
             {
@@ -51,18 +70,15 @@ namespace MicroondasApp
         private int ObterTempoValido()
         {
             if (!int.TryParse(txtTempo.Text, out int tempo) || tempo < 1 || tempo > 120)
-                throw new ArgumentException("Tempo inválido! Informe 1-120 segundos");
-
+                throw new ArgumentException("Tempo inválido (1-120 segundos)");
             return tempo;
         }
 
         private int ObterPotenciaValida()
         {
             if (string.IsNullOrEmpty(txtPotencia.Text)) return 10;
-
             if (!int.TryParse(txtPotencia.Text, out int potencia) || potencia < 1 || potencia > 10)
-                throw new ArgumentException("Potência inválida! Informe 1-10");
-
+                throw new ArgumentException("Potência inválida (1-10)");
             return potencia;
         }
 
@@ -70,14 +86,15 @@ namespace MicroondasApp
         {
             _controlador.IniciarAquecimento(30, 10);
             _timer.Start();
-            lblMensagens.Text = "Início rápido ativado: 30 segundos na potência 10.";
+            btnPausarCancelar.Enabled = true;
+            lblMensagens.Text = "Início rápido: 30s na potência 10";
         }
 
         private void btnPausarCancelar_Click(object sender, EventArgs e)
         {
-            if (_controlador == null)
+            if (_controlador.AquecimentoAtual == null)
             {
-                lblMensagens.Text = "Nenhum aquecimento em andamento.";
+                lblMensagens.Text = "Nenhum aquecimento em andamento";
                 return;
             }
 
@@ -85,38 +102,27 @@ namespace MicroondasApp
             {
                 _controlador.PausarAquecimento();
                 _timer.Stop();
-                lblMensagens.Text = "Aquecimento pausado.";
+                btnPausarCancelar.Text = "Cancelar";
             }
             else
             {
                 _controlador.CancelarAquecimento();
-                _timer.Stop();
-                lblMensagens.Text = "Aquecimento cancelado.";
+                btnPausarCancelar.Text = "Pausar/Cancelar";
+                btnPausarCancelar.Enabled = false;
+                lblMensagens.Text = "Aquecimento cancelado";
             }
         }
 
-        private void AtualizarInterface()
+        private void btnProgramaPipoca_Click(object sender, EventArgs e)
         {
-            lblMensagens.Text = _controlador.ObterStatus();
+            _controlador.IniciarProgramaPredefinido("Pipoca");
+            txtTempo.Text = "180";
+            txtPotencia.Text = "7";
+            txtTempo.Enabled = false;
+            txtPotencia.Enabled = false;
+            _timer.Start();
         }
 
-        private void AtualizarContagemRegressiva(object sender, EventArgs e)
-        {
-            try
-            {
-                var mensagem = _controlador?.ObterStatus(); // Método correto
-                lblMensagens.Text = mensagem;
-            }
-            catch
-            {
-                _timer.Stop();
-                lblMensagens.Text = "Aquecimento concluído.";
-            }
-        }
-
-        private void groupBoxConfiguracoes_Enter(object sender, EventArgs e)
-        {
-
-        }
+        // Implementar handlers similares para outros programas
     }
 }

@@ -8,17 +8,20 @@ public class Aquecimento
     public int Potencia { get; private set; }
     public bool EmPausa { get; set; }
     public bool Concluido { get; private set; }
+    public char CaractereAquecimento { get; private set; } = '.';
+    public string Progresso => _progresso.ToString();
 
     private readonly StringBuilder _progresso;
     private DateTime _ultimaAtualizacao;
 
-    public Aquecimento(int tempo, int potencia)
+    public Aquecimento(int tempo, int potencia, char caractere = '.')
     {
         ValidarParametros(tempo, potencia);
 
         TempoTotal = tempo;
         TempoRestante = tempo;
         Potencia = potencia;
+        CaractereAquecimento = caractere;
         _progresso = new StringBuilder();
         _ultimaAtualizacao = DateTime.Now;
     }
@@ -32,55 +35,48 @@ public class Aquecimento
             throw new ArgumentException("Potência deve ser entre 1 e 10");
     }
 
-    public void AdicionarTempo(int segundos)
+    public void Atualizar()
     {
-        if (Concluido || EmPausa) return;
-
-        TempoTotal += segundos;
-        TempoRestante += segundos;
-    }
-
-    public string Atualizar()
-    {
-        if (Concluido) return GerarMensagemFinal();
+        if (Concluido) return;
 
         var tempoDecorrido = (DateTime.Now - _ultimaAtualizacao).TotalSeconds;
 
         if (!EmPausa && tempoDecorrido >= 1)
         {
-            TempoRestante -= (int)tempoDecorrido;
+            int segundosDecorridos = (int)tempoDecorrido;
+            TempoRestante -= segundosDecorridos;
             _ultimaAtualizacao = DateTime.Now;
 
-            for (int i = 0; i < (int)tempoDecorrido; i++)
+            for (int i = 0; i < segundosDecorridos; i++)
             {
-                _progresso.Append(new string('.', Potencia) + " ");
+                _progresso.Append(new string(CaractereAquecimento, Potencia) + " ");
             }
         }
 
         if (TempoRestante <= 0)
         {
             Concluido = true;
-            return GerarMensagemFinal();
+            _progresso.Append(" Aquecimento concluído!");
         }
-
-        return $"{_progresso} [{FormatarTempo(TempoRestante)}]";
     }
 
-    public void Reset()
+    public void DefinirCaractere(char novoCaractere)
     {
-        TempoRestante = TempoTotal;
-        Concluido = false;
-        EmPausa = false;
-        _progresso.Clear();
+        if (novoCaractere != '.' && !char.IsWhiteSpace(novoCaractere))
+            CaractereAquecimento = novoCaractere;
     }
 
-    private string GerarMensagemFinal() => $"{_progresso} Aquecimento concluído!";
+    public void AdicionarTempo(int segundos)
+    {
+        if (Concluido || EmPausa) return;
+        TempoTotal += segundos;
+        TempoRestante += segundos;
+    }
 
     public static string FormatarTempo(int segundos)
     {
         int minutos = segundos / 60;
         int segundosRestantes = segundos % 60;
-
-        return segundos > 60 ? $"{minutos}:{segundosRestantes:D2}" : $"{segundos} segundos";
+        return segundos > 60 ? $"{minutos}:{segundosRestantes:D2}" : $"{segundos} seg";
     }
 }
