@@ -6,5 +6,6 @@ public interface IControladorMicroondas
     void IniciarProgramaPredefinido(string nomePrograma);
     void PausarAquecimento();
     void CancelarAquecimento();
-    List<ProgramaAquecimento> ListarProgramasPredefinidos();
+    List<ProgramaAquecimento> ListarProgramasCustomizados();
+    void AtualizarListaCustomizados();
 }

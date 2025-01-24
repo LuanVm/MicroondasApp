@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Drawing;
+using Newtonsoft.Json;
 
 public class ProgramaAquecimento
 {
@@ -8,31 +10,52 @@ public class ProgramaAquecimento
     public int Potencia { get; }
     public char CaractereAquecimento { get; }
     public string Instrucoes { get; }
-    public bool IsCustomizado { get; } // Flag para identificar programas customizados
+    public bool IsCustomizado { get; }
 
-    public ProgramaAquecimento(string nome, string alimento, int tempo, int potencia,
-                              char caractere, string instrucoes = "", bool isCustomizado = false)
+    [JsonIgnore]
+    public Image Imagem { get; set; }
+
+    [JsonConstructor]
+    public ProgramaAquecimento(
+        string nome,
+        string alimento,
+        int tempoSegundos,
+        int potencia,
+        char caractereAquecimento,
+        string instrucoes = "",
+        bool isCustomizado = false)
     {
-        ValidarParametros(tempo, potencia, caractere);
-
         Nome = nome;
         Alimento = alimento;
-        TempoSegundos = tempo;
+        TempoSegundos = tempoSegundos;
         Potencia = potencia;
-        CaractereAquecimento = caractere;
+        CaractereAquecimento = caractereAquecimento;
         Instrucoes = instrucoes;
         IsCustomizado = isCustomizado;
+
+        ValidarParametros();
     }
 
-    private void ValidarParametros(int tempo, int potencia, char caractere)
+    private void ValidarParametros()
     {
-        if (tempo < 1)
-            throw new ArgumentException("Tempo inválido");
+        if (IsCustomizado)
+        {
+            // Validação corrigida para 6000 segundos
+            if (TempoSegundos < 1 || TempoSegundos > 6000)
+                throw new ArgumentException("Tempo inválido para programa customizado (1-6000 segundos)");
+        }
+        else
+        {
+            if (TempoSegundos < 1)
+                throw new ArgumentException("Tempo inválido para pré-definido (mínimo 1 segundo)");
+        }
 
-        if (potencia < 1 || potencia > 10)
-            throw new ArgumentException("Potência inválida");
+        if (Potencia < 1 || Potencia > 10)
+            throw new ArgumentException("Potência inválida (1-10)");
 
-        if (caractere == '.' || char.IsWhiteSpace(caractere))
-            throw new ArgumentException("Caractere inválido para programas pré-definidos");
+        if (IsCustomizado && (CaractereAquecimento == '.' || char.IsWhiteSpace(CaractereAquecimento)))
+            throw new ArgumentException("Caractere inválido para customizados");
+        else if (CaractereAquecimento == '.')
+            throw new ArgumentException("Caractere '.' reservado para uso padrão");
     }
 }

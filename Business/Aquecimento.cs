@@ -17,6 +17,7 @@ public class Aquecimento
 
     public Aquecimento(int tempo, int potencia, bool isPredefinido = false, char caractere = '.')
     {
+        // Aplica limite de tempo APENAS se NÃO for predefinido
         if (!isPredefinido && (tempo < 1 || tempo > 120))
             throw new ArgumentException("Tempo deve ser entre 1 e 120 segundos");
 
@@ -59,6 +60,15 @@ public class Aquecimento
         }
 
         Progresso = _progressoBuilder.ToString().Trim();
+    }
+
+    public int ProgressoPercentual
+    {
+        get
+        {
+            if (TempoTotal == 0) return 0;
+            return (int)((TempoTotal - TempoRestante) / (double)TempoTotal * 100);
+        }
     }
 
     public void AdicionarTempo(int segundos)

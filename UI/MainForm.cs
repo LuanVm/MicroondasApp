@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -100,6 +101,9 @@ namespace MicroondasApp
                 txtTempo.Enabled = false;
                 txtPotencia.Enabled = false;
 
+                // Exibir as instruções no label
+                lblInstrucoes.Text = programa.Instrucoes;
+
                 _timer.Start();
                 btnPausarCancelar.Enabled = true;
                 lblMensagens.Text = $"Programa {nomePrograma} iniciado";
@@ -186,12 +190,116 @@ namespace MicroondasApp
                 btnPausarCancelar.Text = "Pausar/Cancelar";
                 btnPausarCancelar.Enabled = false;
                 lblMensagens.Text = "Aquecimento cancelado";
+                lblInstrucoes.Text = "";
                 txtTempo.Enabled = true;
                 txtPotencia.Enabled = true;
                 txtTempo.Clear();
                 txtPotencia.Text = "10";
                 lblTempoRestante.Text = "00:00 Restantes";
             }
+        }
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            try
+            {
+                _controlador.AtualizarListaCustomizados();
+                CarregarProgramasCustomizados();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro crítico: {ex.Message}");
+            }
+        }
+
+        private void CarregarProgramasCustomizados()
+        {
+            flowProgramas.Controls.Clear();
+
+            foreach (var programa in _controlador.ListarProgramasCustomizados())
+            {
+                var btn = new Button
+                {
+                    Text = programa.Nome,
+                    Tag = programa,
+                    Size = new Size(140, 150),
+                    Font = new Font("Segoe UI", 10, FontStyle.Italic),
+                    TextImageRelation = TextImageRelation.TextAboveImage,
+                    Image = programa.Imagem ?? null
+                };
+                btn.Click += ProgramaCustomizado_Click;
+
+                var toolTip = new ToolTip();
+                toolTip.SetToolTip(btn, programa.Instrucoes);
+
+                flowProgramas.Controls.Add(btn);
+            }
+
+            flowProgramas.Refresh();
+        }
+
+        private void btnNovoPrograma_Click(object sender, EventArgs e)
+        {
+            using (var form = new CustomProgramForm(_controlador))
+            {
+                if (form.ShowDialog() == DialogResult.OK)
+                {
+                    // Recarrega TUDO do zero
+                    _controlador.AtualizarListaCustomizados();
+                    CarregarProgramasCustomizados();
+
+                    flowProgramas.PerformLayout();
+                    this.Update();
+                    this.Refresh();
+                }
+            }
+        }
+
+        private void ProgramaCustomizado_Click(object sender, EventArgs e)
+        {
+            var botao = (Button)sender;
+            var programa = (ProgramaAquecimento)botao.Tag;
+
+            if (programa == null)
+            {
+                lblMensagens.Text = "Programa inválido.";
+                return;
+            }
+
+            try
+            {
+                // Verifica se o programa está na lista (evita null)
+                if (!_controlador.ListarProgramasCustomizados()?.Any(p => p.Nome == programa.Nome) ?? true)
+                    throw new ArgumentException("Programa não encontrado.");
+
+                _controlador.IniciarProgramaCustomizado(programa.Nome);
+
+                // Atualiza interface
+                txtTempo.Text = programa.TempoSegundos.ToString();
+                txtPotencia.Text = programa.Potencia.ToString();
+                txtTempo.Enabled = false;
+                txtPotencia.Enabled = false;
+
+                lblInstrucoes.Text = programa.Instrucoes;
+                _timer.Start();
+                btnPausarCancelar.Enabled = true;
+                lblMensagens.Text = $"Programa {programa.Nome} iniciado";
+            }
+            catch (Exception ex)
+            {
+                lblMensagens.Text = $"Erro: {ex.Message}";
+            }
+        }
+
+
+
+        private void lblExemploTempo_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void flowProgramas_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

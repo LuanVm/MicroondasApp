@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace MicroondasApp
 {
@@ -21,6 +22,7 @@ namespace MicroondasApp
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            this.btnNovoPrograma = new System.Windows.Forms.Button();
             this.txtTempo = new System.Windows.Forms.TextBox();
             this.txtPotencia = new System.Windows.Forms.TextBox();
             this.lblTempo = new System.Windows.Forms.Label();
@@ -40,9 +42,26 @@ namespace MicroondasApp
             this.btnProgramaPipoca = new System.Windows.Forms.Button();
             this.imgListProgramas = new System.Windows.Forms.ImageList(this.components);
             this.lblTempoRestante = new System.Windows.Forms.Label();
+            this.lblInstrucoes = new System.Windows.Forms.Label();
+            this.flowProgramas = new System.Windows.Forms.FlowLayoutPanel();
             this.groupBoxConfiguracoes.SuspendLayout();
             this.groupBoxProgramas.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // btnNovoPrograma
+            // 
+            this.btnNovoPrograma.BackColor = System.Drawing.Color.SeaGreen;
+            this.btnNovoPrograma.FlatAppearance.BorderSize = 0;
+            this.btnNovoPrograma.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnNovoPrograma.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.btnNovoPrograma.ForeColor = System.Drawing.Color.White;
+            this.btnNovoPrograma.Location = new System.Drawing.Point(430, 100);
+            this.btnNovoPrograma.Name = "btnNovoPrograma";
+            this.btnNovoPrograma.Size = new System.Drawing.Size(150, 40);
+            this.btnNovoPrograma.TabIndex = 9;
+            this.btnNovoPrograma.Text = "Novo Programa";
+            this.btnNovoPrograma.UseVisualStyleBackColor = false;
+            this.btnNovoPrograma.Click += new System.EventHandler(this.btnNovoPrograma_Click);
             // 
             // txtTempo
             // 
@@ -84,19 +103,22 @@ namespace MicroondasApp
             // 
             // lblMensagens
             // 
-            this.lblMensagens.BackColor = System.Drawing.Color.White;
+            this.lblMensagens.BackColor = System.Drawing.SystemColors.Window;
             this.lblMensagens.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblMensagens.Font = new System.Drawing.Font("Consolas", 12F);
-            this.lblMensagens.Location = new System.Drawing.Point(50, 467);
+            this.lblMensagens.Location = new System.Drawing.Point(50, 270);
             this.lblMensagens.Name = "lblMensagens";
             this.lblMensagens.Padding = new System.Windows.Forms.Padding(5);
-            this.lblMensagens.Size = new System.Drawing.Size(775, 66);
+            this.lblMensagens.Size = new System.Drawing.Size(775, 70);
             this.lblMensagens.TabIndex = 4;
+            this.lblMensagens.Text = "Indicador de funcionamento.";
             this.lblMensagens.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // btnIniciar
             // 
-            this.btnIniciar.BackColor = System.Drawing.Color.SteelBlue;
+            this.btnIniciar.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.btnIniciar.FlatAppearance.BorderSize = 0;
+            this.btnIniciar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnIniciar.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
             this.btnIniciar.ForeColor = System.Drawing.Color.White;
             this.btnIniciar.Location = new System.Drawing.Point(274, 50);
@@ -109,7 +131,9 @@ namespace MicroondasApp
             // 
             // btnInicioRapido
             // 
-            this.btnInicioRapido.BackColor = System.Drawing.Color.Teal;
+            this.btnInicioRapido.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.btnInicioRapido.FlatAppearance.BorderSize = 0;
+            this.btnInicioRapido.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnInicioRapido.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
             this.btnInicioRapido.ForeColor = System.Drawing.Color.White;
             this.btnInicioRapido.Location = new System.Drawing.Point(274, 100);
@@ -123,6 +147,8 @@ namespace MicroondasApp
             // btnPausarCancelar
             // 
             this.btnPausarCancelar.BackColor = System.Drawing.Color.OrangeRed;
+            this.btnPausarCancelar.FlatAppearance.BorderSize = 0;
+            this.btnPausarCancelar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnPausarCancelar.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
             this.btnPausarCancelar.ForeColor = System.Drawing.Color.White;
             this.btnPausarCancelar.Location = new System.Drawing.Point(430, 50);
@@ -153,11 +179,12 @@ namespace MicroondasApp
             // 
             this.lblExemploTempo.AutoSize = true;
             this.lblExemploTempo.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.lblExemploTempo.Location = new System.Drawing.Point(20, 80);
+            this.lblExemploTempo.Location = new System.Drawing.Point(22, 82);
             this.lblExemploTempo.Name = "lblExemploTempo";
-            this.lblExemploTempo.Size = new System.Drawing.Size(116, 15);
+            this.lblExemploTempo.Size = new System.Drawing.Size(115, 15);
             this.lblExemploTempo.TabIndex = 7;
-            this.lblExemploTempo.Text = "Ex.: 60 para 1 minuto";
+            this.lblExemploTempo.Text = "60 Segundos = 01:00";
+            this.lblExemploTempo.Click += new System.EventHandler(this.lblExemploTempo_Click);
             // 
             // lblExemploPotencia
             // 
@@ -165,21 +192,22 @@ namespace MicroondasApp
             this.lblExemploPotencia.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lblExemploPotencia.Location = new System.Drawing.Point(20, 150);
             this.lblExemploPotencia.Name = "lblExemploPotencia";
-            this.lblExemploPotencia.Size = new System.Drawing.Size(100, 15);
+            this.lblExemploPotencia.Size = new System.Drawing.Size(117, 15);
             this.lblExemploPotencia.TabIndex = 8;
-            this.lblExemploPotencia.Text = "1 a 10 (padrão 10)";
+            this.lblExemploPotencia.Text = "De 1 a 10 (padrão 10)";
             // 
             // groupBoxProgramas
             // 
+            this.groupBoxProgramas.AutoSize = true;
             this.groupBoxProgramas.Controls.Add(this.btnProgramaFeijao);
             this.groupBoxProgramas.Controls.Add(this.btnProgramaFrango);
             this.groupBoxProgramas.Controls.Add(this.btnProgramaCarne);
             this.groupBoxProgramas.Controls.Add(this.btnProgramaLeite);
             this.groupBoxProgramas.Controls.Add(this.btnProgramaPipoca);
             this.groupBoxProgramas.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-            this.groupBoxProgramas.Location = new System.Drawing.Point(50, 250);
+            this.groupBoxProgramas.Location = new System.Drawing.Point(50, 354);
             this.groupBoxProgramas.Name = "groupBoxProgramas";
-            this.groupBoxProgramas.Size = new System.Drawing.Size(775, 200);
+            this.groupBoxProgramas.Size = new System.Drawing.Size(775, 208);
             this.groupBoxProgramas.TabIndex = 7;
             this.groupBoxProgramas.TabStop = false;
             this.groupBoxProgramas.Text = "Programas Pré-definidos";
@@ -259,26 +287,61 @@ namespace MicroondasApp
             // 
             this.lblTempoRestante.AutoSize = true;
             this.lblTempoRestante.Font = new System.Drawing.Font("Segoe UI", 12F);
-            this.lblTempoRestante.Location = new System.Drawing.Point(50, 437);
+            this.lblTempoRestante.Location = new System.Drawing.Point(50, 240);
             this.lblTempoRestante.Name = "lblTempoRestante";
             this.lblTempoRestante.Size = new System.Drawing.Size(132, 21);
             this.lblTempoRestante.TabIndex = 8;
             this.lblTempoRestante.Text = "Tempo restante: 0";
             // 
+            // lblInstrucoes
+            // 
+            this.lblInstrucoes.BackColor = System.Drawing.SystemColors.Window;
+            this.lblInstrucoes.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblInstrucoes.Font = new System.Drawing.Font("Consolas", 9F);
+            this.lblInstrucoes.Location = new System.Drawing.Point(274, 151);
+            this.lblInstrucoes.Name = "lblInstrucoes";
+            this.lblInstrucoes.Padding = new System.Windows.Forms.Padding(5);
+            this.lblInstrucoes.Size = new System.Drawing.Size(306, 79);
+            this.lblInstrucoes.TabIndex = 0;
+            this.lblInstrucoes.Text = "Instruções de acordo com o alimento selecionado.";
+            this.lblInstrucoes.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // flowProgramas
+            // 
+            this.flowProgramas.AutoScroll = true;
+            this.flowProgramas.FlowDirection = FlowDirection.LeftToRight;
+            this.flowProgramas.WrapContents = false;
+            this.flowProgramas.AutoSize = false;
+            this.flowProgramas.BackColor = System.Drawing.SystemColors.Control;
+            this.flowProgramas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.flowProgramas.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.flowProgramas.Location = new System.Drawing.Point(50, 568);
+            this.flowProgramas.Name = "flowProgramas";
+            this.flowProgramas.Padding = new System.Windows.Forms.Padding(5);
+            this.flowProgramas.Size = new System.Drawing.Size(775, 200);
+            this.flowProgramas.TabIndex = 0;
+            this.flowProgramas.Paint += new System.Windows.Forms.PaintEventHandler(this.flowProgramas_Paint);
+            // 
             // MainForm
             // 
-            this.ClientSize = new System.Drawing.Size(884, 561);
+            this.AutoScroll = true;
+            this.AutoSize = true;
+            this.ClientSize = new System.Drawing.Size(884, 830);
+            this.Controls.Add(this.flowProgramas);
+            this.Controls.Add(this.lblInstrucoes);
             this.Controls.Add(this.lblTempoRestante);
             this.Controls.Add(this.groupBoxProgramas);
             this.Controls.Add(this.groupBoxConfiguracoes);
             this.Controls.Add(this.btnPausarCancelar);
             this.Controls.Add(this.btnInicioRapido);
             this.Controls.Add(this.btnIniciar);
+            this.Controls.Add(this.btnNovoPrograma);
             this.Controls.Add(this.lblMensagens);
             this.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.Name = "MainForm";
             this.Text = "Microondas Digital";
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.groupBoxConfiguracoes.ResumeLayout(false);
             this.groupBoxConfiguracoes.PerformLayout();
             this.groupBoxProgramas.ResumeLayout(false);
@@ -289,6 +352,7 @@ namespace MicroondasApp
 
         #endregion
 
+        private System.Windows.Forms.Button btnNovoPrograma;
         private System.Windows.Forms.TextBox txtTempo;
         private System.Windows.Forms.TextBox txtPotencia;
         private System.Windows.Forms.Label lblTempo;
@@ -308,5 +372,7 @@ namespace MicroondasApp
         private System.Windows.Forms.Button btnProgramaPipoca;
         private System.Windows.Forms.ImageList imgListProgramas;
         private System.Windows.Forms.Label lblTempoRestante;
+        private System.Windows.Forms.Label lblInstrucoes;
+        private System.Windows.Forms.FlowLayoutPanel flowProgramas;
     }
 }
