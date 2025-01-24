@@ -18,7 +18,7 @@ namespace MicroondasApp
         }
 
         #region Windows Form Designer generated code
-
+        //t
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
