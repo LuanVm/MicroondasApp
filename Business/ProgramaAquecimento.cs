@@ -8,9 +8,10 @@ public class ProgramaAquecimento
     public int Potencia { get; }
     public char CaractereAquecimento { get; }
     public string Instrucoes { get; }
+    public bool IsCustomizado { get; } // Flag para identificar programas customizados
 
     public ProgramaAquecimento(string nome, string alimento, int tempo, int potencia,
-                              char caractere, string instrucoes = "")
+                              char caractere, string instrucoes = "", bool isCustomizado = false)
     {
         ValidarParametros(tempo, potencia, caractere);
 
@@ -20,6 +21,7 @@ public class ProgramaAquecimento
         Potencia = potencia;
         CaractereAquecimento = caractere;
         Instrucoes = instrucoes;
+        IsCustomizado = isCustomizado;
     }
 
     private void ValidarParametros(int tempo, int potencia, char caractere)

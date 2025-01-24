@@ -63,9 +63,9 @@ namespace MicroondasApp.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap can {
+        internal static System.Drawing.Bitmap Carne {
             get {
-                object obj = ResourceManager.GetObject("can", resourceCulture);
+                object obj = ResourceManager.GetObject("Carne", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,9 @@ namespace MicroondasApp.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap chicken_leg {
+        internal static System.Drawing.Bitmap Feijao {
             get {
-                object obj = ResourceManager.GetObject("chicken-leg", resourceCulture);
+                object obj = ResourceManager.GetObject("Feijao", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -83,9 +83,9 @@ namespace MicroondasApp.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap chicken_leg1 {
+        internal static System.Drawing.Bitmap Frango {
             get {
-                object obj = ResourceManager.GetObject("chicken-leg1", resourceCulture);
+                object obj = ResourceManager.GetObject("Frango", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -93,9 +93,9 @@ namespace MicroondasApp.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap meat {
+        internal static System.Drawing.Bitmap Leite {
             get {
-                object obj = ResourceManager.GetObject("meat", resourceCulture);
+                object obj = ResourceManager.GetObject("Leite", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -103,29 +103,9 @@ namespace MicroondasApp.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap milk {
+        internal static System.Drawing.Bitmap Pipoca {
             get {
-                object obj = ResourceManager.GetObject("milk", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap popcorn {
-            get {
-                object obj = ResourceManager.GetObject("popcorn", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap popcorn1 {
-            get {
-                object obj = ResourceManager.GetObject("popcorn1", resourceCulture);
+                object obj = ResourceManager.GetObject("Pipoca", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

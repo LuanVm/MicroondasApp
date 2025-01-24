@@ -1,14 +1,17 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using Newtonsoft.Json;
 
 public class ControladorMicroondas : IControladorMicroondas
 {
     public Aquecimento AquecimentoAtual { get; private set; }
-    private readonly List<ProgramaAquecimento> _programasCustomizados = new List<ProgramaAquecimento>();
+    private readonly List<ProgramaAquecimento> _programasPredefinidos;
+    private List<ProgramaAquecimento> _programasCustomizados;  // Lista de programas customizados
 
     public ControladorMicroondas()
     {
-        _programasCustomizados = new List<ProgramaAquecimento>
+        _programasPredefinidos = new List<ProgramaAquecimento>
         {
             new ProgramaAquecimento("Pipoca", "Pipoca (de micro-ondas)", 180, 7, '*', "Observar o barulho de estouros"),
             new ProgramaAquecimento("Leite", "Leite", 300, 5, '~', "Cuidado com fervura instantânea"),
@@ -16,7 +19,15 @@ public class ControladorMicroondas : IControladorMicroondas
             new ProgramaAquecimento("Frango", "Frango", 480, 7, '@', "Virar na metade do tempo"),
             new ProgramaAquecimento("Feijão", "Feijão congelado", 480, 9, '&', "Recipiente destampado")
         };
+
+        _programasCustomizados = CarregarProgramasCustomizados(); // Carrega programas customizados do arquivo JSON
     }
+
+    public List<ProgramaAquecimento> ListarProgramasPredefinidos()
+        => new List<ProgramaAquecimento>(_programasPredefinidos);
+
+    public List<ProgramaAquecimento> ListarProgramasCustomizados()
+        => new List<ProgramaAquecimento>(_programasCustomizados);
 
     public void IniciarAquecimento(int tempo, int potencia)
     {
@@ -28,24 +39,37 @@ public class ControladorMicroondas : IControladorMicroondas
         {
             AquecimentoAtual.EmPausa = false;
         }
-        else
+        else if (!AquecimentoAtual.IsPredefinido)
         {
             AquecimentoAtual.AdicionarTempo(30);
         }
     }
 
-    public void IniciarProgramaPredefinido(string nomePrograma)
+    public bool VerificarCaractereRepetido(char caractere)
     {
-        var programa = _programasCustomizados.FirstOrDefault(p => p.Nome == nomePrograma);
-        if (programa != null)
-        {
-            AquecimentoAtual = new Aquecimento(programa.TempoSegundos, programa.Potencia, programa.CaractereAquecimento);
-        }
+        // Verificando em programas pré-definidos
+        if (_programasPredefinidos.Any(p => p.CaractereAquecimento == caractere))
+            return true;
+
+        // Verificando em programas customizados
+        if (_programasCustomizados.Any(p => p.CaractereAquecimento == caractere))
+            return true;
+
+        return false;
     }
 
-    public void AdicionarProgramaCustomizado(ProgramaAquecimento programa)
+    public void IniciarProgramaPredefinido(string nomePrograma)
     {
-        _programasCustomizados.Add(programa);
+        var programa = _programasPredefinidos.FirstOrDefault(p => p.Nome == nomePrograma);
+        if (programa != null)
+        {
+            AquecimentoAtual = new Aquecimento(
+                programa.TempoSegundos,
+                programa.Potencia,
+                isPredefinido: true,
+                caractere: programa.CaractereAquecimento
+            );
+        }
     }
 
     public void PausarAquecimento()
@@ -61,10 +85,17 @@ public class ControladorMicroondas : IControladorMicroondas
         AquecimentoAtual = null;
     }
 
-    public void AdicionarTempo(int segundos)
+    public void SalvarProgramasCustomizados()
     {
-        AquecimentoAtual?.AdicionarTempo(segundos);
+        var json = JsonConvert.SerializeObject(_programasCustomizados, Formatting.Indented);
+        File.WriteAllText("programas_customizados.json", json);
     }
 
-    public List<ProgramaAquecimento> ListarProgramas() => new List<ProgramaAquecimento>(_programasCustomizados);
+    private List<ProgramaAquecimento> CarregarProgramasCustomizados()
+    {
+        if (!File.Exists("programas_customizados.json")) return new List<ProgramaAquecimento>();
+
+        var json = File.ReadAllText("programas_customizados.json");
+        return JsonConvert.DeserializeObject<List<ProgramaAquecimento>>(json);
+    }
 }
