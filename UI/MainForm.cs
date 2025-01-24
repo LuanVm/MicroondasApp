@@ -38,6 +38,31 @@ namespace MicroondasApp
             btnProgramaFeijao.Click += ProgramaPredefinido_Click;
         }
 
+        private void btnProgramaPipoca_Click(object sender, EventArgs e)
+        {
+            IniciarProgramaPredefinido("Pipoca");
+        }
+
+        private void btnProgramaLeite_Click(object sender, EventArgs e)
+        {
+            IniciarProgramaPredefinido("Leite");
+        }
+
+        private void btnProgramaCarne_Click(object sender, EventArgs e)
+        {
+            IniciarProgramaPredefinido("Carnes");
+        }
+
+        private void btnProgramaFrango_Click(object sender, EventArgs e)
+        {
+            IniciarProgramaPredefinido("Frango");
+        }
+
+        private void btnProgramaFeijao_Click(object sender, EventArgs e)
+        {
+            IniciarProgramaPredefinido("Feijão");
+        }
+
         private void AtualizarInterface()
         {
             if (_controlador.AquecimentoAtual == null) return;
@@ -45,12 +70,14 @@ namespace MicroondasApp
             _controlador.AquecimentoAtual.Atualizar();
 
             lblMensagens.Text = _controlador.AquecimentoAtual.Progresso;
-            lblTempoRestante.Text = Aquecimento.FormatarTempo(_controlador.AquecimentoAtual.TempoRestante);
+            lblTempoRestante.Text = $"{Aquecimento.FormatarTempo(_controlador.AquecimentoAtual.TempoRestante)} Restantes";
 
             if (_controlador.AquecimentoAtual.Concluido)
             {
                 _timer.Stop();
                 btnPausarCancelar.Enabled = false;
+                txtTempo.Enabled = true;
+                txtPotencia.Enabled = true;
             }
         }
 
@@ -91,6 +118,7 @@ namespace MicroondasApp
                 {
                     _controlador.AquecimentoAtual.EmPausa = false;
                     _timer.Start();
+                    btnPausarCancelar.Text = "Pausar/Cancelar";
                     return;
                 }
 
@@ -100,6 +128,8 @@ namespace MicroondasApp
                 _controlador.IniciarAquecimento(tempo, potencia);
                 _timer.Start();
                 btnPausarCancelar.Enabled = true;
+                txtTempo.Enabled = false;
+                txtPotencia.Enabled = false;
             }
             catch (ArgumentException ex)
             {
@@ -127,6 +157,10 @@ namespace MicroondasApp
             _controlador.IniciarAquecimento(30, 10);
             _timer.Start();
             btnPausarCancelar.Enabled = true;
+            txtTempo.Text = "30";
+            txtPotencia.Text = "10";
+            txtTempo.Enabled = false;
+            txtPotencia.Enabled = false;
             lblMensagens.Text = "Início rápido: 30s na potência 10";
         }
 
@@ -143,81 +177,21 @@ namespace MicroondasApp
                 _controlador.PausarAquecimento();
                 _timer.Stop();
                 btnPausarCancelar.Text = "Cancelar";
+                lblMensagens.Text = "Aquecimento pausado";
             }
             else
             {
                 _controlador.CancelarAquecimento();
+                _timer.Stop();
                 btnPausarCancelar.Text = "Pausar/Cancelar";
                 btnPausarCancelar.Enabled = false;
                 lblMensagens.Text = "Aquecimento cancelado";
                 txtTempo.Enabled = true;
                 txtPotencia.Enabled = true;
+                txtTempo.Clear();
+                txtPotencia.Text = "10";
+                lblTempoRestante.Text = "00:00 Restantes";
             }
         }
-        private void btnProgramaPipoca_Click(object sender, EventArgs e)
-        {
-            // Lógica para o programa de Pipoca
-            int tempo = 3; // em minutos
-            int potencia = 7;
-            string instrucoes = "Observar o barulho de estouros do milho. Caso houver um intervalo de mais de 10 segundos entre um estouro e outro, interrompa o aquecimento.";
-
-            // Chamada para iniciar o aquecimento
-            IniciarAquecimento(tempo, potencia, instrucoes);
-        }
-
-        private void btnProgramaLeite_Click(object sender, EventArgs e)
-        {
-            // Lógica para o programa de Leite
-            int tempo = 5; // em minutos
-            int potencia = 5;
-            string instrucoes = "Cuidado com aquecimento de líquidos. O choque térmico e o movimento do recipiente podem causar fervura imediata, provocando risco de queimaduras.";
-
-            // Chamada para iniciar o aquecimento
-            IniciarAquecimento(tempo, potencia, instrucoes);
-        }
-
-        private void btnProgramaCarne_Click(object sender, EventArgs e)
-        {
-            // Lógica para o programa de Carne
-            int tempo = 14; // em minutos
-            int potencia = 4;
-            string instrucoes = "Interrompa o processo na metade e vire o conteúdo com a parte de baixo para cima para descongelamento uniforme.";
-
-            // Chamada para iniciar o aquecimento
-            IniciarAquecimento(tempo, potencia, instrucoes);
-        }
-
-        private void btnProgramaFrango_Click(object sender, EventArgs e)
-        {
-            // Lógica para o programa de Frango
-            int tempo = 8; // em minutos
-            int potencia = 7;
-            string instrucoes = "Interrompa o processo na metade e vire o conteúdo com a parte de baixo para cima para descongelamento uniforme.";
-
-            // Chamada para iniciar o aquecimento
-            IniciarAquecimento(tempo, potencia, instrucoes);
-        }
-
-        private void btnProgramaFeijao_Click(object sender, EventArgs e)
-        {
-            // Lógica para o programa de Feijão
-            int tempo = 8; // em minutos
-            int potencia = 9;
-            string instrucoes = "Deixe o recipiente destampado e, em casos de plástico, cuidado ao retirar o recipiente, pois ele pode perder resistência em altas temperaturas.";
-
-            // Chamada para iniciar o aquecimento
-            IniciarAquecimento(tempo, potencia, instrucoes);
-        }
-
-        // Método genérico para iniciar o aquecimento
-        private void IniciarAquecimento(int tempo, int potencia, string instrucoes)
-        {
-            // Exibe as informações na interface
-            lblMensagens.Text = $"Iniciando... Tempo: {tempo} min, Potência: {potencia}\nInstruções: {instrucoes}";
-
-            // Aqui, você pode adicionar a lógica para controlar o aquecimento de acordo com o tempo e a potência.
-            // Exemplo: iniciar o temporizador, ajustar a potência, etc.
-        }
-
     }
 }

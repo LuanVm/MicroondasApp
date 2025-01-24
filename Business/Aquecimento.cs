@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 public class Aquecimento
 {
@@ -9,8 +10,10 @@ public class Aquecimento
     public bool Concluido { get; private set; }
     public bool IsPredefinido { get; }
     public string Progresso { get; private set; }
+    public char Caractere { get; }
 
     private DateTime _ultimaAtualizacao;
+    private readonly StringBuilder _progressoBuilder;
 
     public Aquecimento(int tempo, int potencia, bool isPredefinido = false, char caractere = '.')
     {
@@ -24,8 +27,10 @@ public class Aquecimento
         TempoRestante = tempo;
         Potencia = potencia;
         IsPredefinido = isPredefinido;
-        Progresso = "Em execução...";
+        Caractere = caractere;
+        _progressoBuilder = new StringBuilder();
         _ultimaAtualizacao = DateTime.Now;
+        Progresso = string.Empty;
     }
 
     public void Atualizar()
@@ -36,18 +41,24 @@ public class Aquecimento
 
         if (!EmPausa && tempoDecorrido >= 1)
         {
-            int segundosDecorridos = (int)tempoDecorrido;
-            TempoRestante -= segundosDecorridos;
+            int segundosPassados = (int)tempoDecorrido;
+            for (int i = 0; i < segundosPassados; i++)
+            {
+                _progressoBuilder.Append(new string(Caractere, Potencia));
+                _progressoBuilder.Append(' ');
+            }
+
+            TempoRestante -= segundosPassados;
             _ultimaAtualizacao = DateTime.Now;
 
-            Progresso = "Em execução..."; // Mensagem fixa
+            if (TempoRestante <= 0)
+            {
+                Concluido = true;
+                _progressoBuilder.Append("Aquecimento concluído");
+            }
         }
 
-        if (TempoRestante <= 0)
-        {
-            Concluido = true;
-            Progresso = "Aquecimento concluído!";
-        }
+        Progresso = _progressoBuilder.ToString().Trim();
     }
 
     public void AdicionarTempo(int segundos)
@@ -61,6 +72,6 @@ public class Aquecimento
     {
         int minutos = segundos / 60;
         int segundosRestantes = segundos % 60;
-        return $"{minutos:D2}:{segundosRestantes:D2} Restantes";
+        return $"{minutos:D2}:{segundosRestantes:D2}";
     }
 }

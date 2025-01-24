@@ -21,7 +21,6 @@ namespace MicroondasApp
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.txtTempo = new System.Windows.Forms.TextBox();
             this.txtPotencia = new System.Windows.Forms.TextBox();
             this.lblTempo = new System.Windows.Forms.Label();
@@ -250,13 +249,19 @@ namespace MicroondasApp
             this.btnProgramaPipoca.UseVisualStyleBackColor = true;
             this.btnProgramaPipoca.Click += new System.EventHandler(this.btnProgramaPipoca_Click);
             // 
+            // imgListProgramas
+            // 
+            this.imgListProgramas.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
+            this.imgListProgramas.ImageSize = new System.Drawing.Size(16, 16);
+            this.imgListProgramas.TransparentColor = System.Drawing.Color.Transparent;
+            // 
             // lblTempoRestante
             // 
             this.lblTempoRestante.AutoSize = true;
             this.lblTempoRestante.Font = new System.Drawing.Font("Segoe UI", 12F);
             this.lblTempoRestante.Location = new System.Drawing.Point(50, 437);
             this.lblTempoRestante.Name = "lblTempoRestante";
-            this.lblTempoRestante.Size = new System.Drawing.Size(133, 21);
+            this.lblTempoRestante.Size = new System.Drawing.Size(132, 21);
             this.lblTempoRestante.TabIndex = 8;
             this.lblTempoRestante.Text = "Tempo restante: 0";
             // 
@@ -270,6 +275,8 @@ namespace MicroondasApp
             this.Controls.Add(this.btnInicioRapido);
             this.Controls.Add(this.btnIniciar);
             this.Controls.Add(this.lblMensagens);
+            this.Cursor = System.Windows.Forms.Cursors.Arrow;
+            this.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.Name = "MainForm";
             this.Text = "Microondas Digital";
             this.groupBoxConfiguracoes.ResumeLayout(false);
@@ -277,6 +284,7 @@ namespace MicroondasApp
             this.groupBoxProgramas.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         #endregion
