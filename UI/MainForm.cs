@@ -71,11 +71,12 @@ namespace MicroondasApp
             _controlador.AquecimentoAtual.Atualizar();
 
             lblMensagens.Text = _controlador.AquecimentoAtual.Progresso;
-            lblTempoRestante.Text = $"{Aquecimento.FormatarTempo(_controlador.AquecimentoAtual.TempoRestante)} Restantes";
+            lblTempoRestante.Text = _controlador.AquecimentoAtual.Concluido
+                ? "00:00 Restantes"
+                : $"{Aquecimento.FormatarTempo(_controlador.AquecimentoAtual.TempoRestante)} Restantes";
 
             if (_controlador.AquecimentoAtual.Concluido)
             {
-                _timer.Stop();
                 btnPausarCancelar.Enabled = false;
                 txtTempo.Enabled = true;
                 txtPotencia.Enabled = true;
@@ -114,6 +115,20 @@ namespace MicroondasApp
             }
         }
 
+        private int ObterTempoValido()
+        {
+            if (!int.TryParse(txtTempo.Text, out int tempo) || tempo < 1 || tempo > 120)
+                throw new ArgumentException("Tempo inválido (1-120 segundos)");
+            return tempo;
+        }
+
+        private int ObterPotenciaValida()
+        {
+            if (string.IsNullOrEmpty(txtPotencia.Text)) return 10;
+            if (!int.TryParse(txtPotencia.Text, out int potencia) || potencia < 1 || potencia > 10)
+                throw new ArgumentException("Potência inválida (1-10)");
+            return potencia;
+        }
         private void btnIniciar_Click(object sender, EventArgs e)
         {
             try
@@ -141,21 +156,6 @@ namespace MicroondasApp
             }
         }
 
-        private int ObterTempoValido()
-        {
-            if (!int.TryParse(txtTempo.Text, out int tempo) || tempo < 1 || tempo > 120)
-                throw new ArgumentException("Tempo inválido (1-120 segundos)");
-            return tempo;
-        }
-
-        private int ObterPotenciaValida()
-        {
-            if (string.IsNullOrEmpty(txtPotencia.Text)) return 10;
-            if (!int.TryParse(txtPotencia.Text, out int potencia) || potencia < 1 || potencia > 10)
-                throw new ArgumentException("Potência inválida (1-10)");
-            return potencia;
-        }
-
         private void btnInicioRapido_Click(object sender, EventArgs e)
         {
             _controlador.IniciarAquecimento(30, 10);
@@ -170,11 +170,7 @@ namespace MicroondasApp
 
         private void btnPausarCancelar_Click(object sender, EventArgs e)
         {
-            if (_controlador.AquecimentoAtual == null)
-            {
-                lblMensagens.Text = "Nenhum aquecimento em andamento";
-                return;
-            }
+            if (_controlador.AquecimentoAtual == null) return;
 
             if (_timer.Enabled)
             {
@@ -187,9 +183,9 @@ namespace MicroondasApp
             {
                 _controlador.CancelarAquecimento();
                 _timer.Stop();
+                lblMensagens.Text = "Aquecimento cancelado";
                 btnPausarCancelar.Text = "Pausar/Cancelar";
                 btnPausarCancelar.Enabled = false;
-                lblMensagens.Text = "Aquecimento cancelado";
                 lblInstrucoes.Text = "";
                 txtTempo.Enabled = true;
                 txtPotencia.Enabled = true;

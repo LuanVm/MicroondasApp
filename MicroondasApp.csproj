@@ -82,6 +82,7 @@
     <Compile Include="Business\IControladorMicroondas.cs" />
     <Compile Include="Business\Program.cs" />
     <Compile Include="Business\ProgramaAquecimento.cs" />
+    <Compile Include="Business\ProgramaRepository.cs" />
     <Compile Include="UI\CustomProgramForm.cs">
       <SubType>Form</SubType>
     </Compile>

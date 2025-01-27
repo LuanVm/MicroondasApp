@@ -11,6 +11,9 @@ public class Aquecimento
     public bool IsPredefinido { get; }
     public string Progresso { get; private set; }
     public char Caractere { get; }
+    private bool _pipAtivo;
+    private DateTime _inicioPip;
+    private const int IntervaloPip = 1000; // 1 segundo entre cada "Pip"
 
     private DateTime _ultimaAtualizacao;
     private readonly StringBuilder _progressoBuilder;
@@ -36,38 +39,44 @@ public class Aquecimento
 
     public void Atualizar()
     {
-        if (Concluido) return;
+        if (Concluido)
+        {
+            // Atualiza os "Pip" continuamente
+            var tempoDesdePip = (DateTime.Now - _inicioPip).TotalMilliseconds;
+            if (tempoDesdePip >= IntervaloPip)
+            {
+                _progressoBuilder.Append(" Pip.");
+                _inicioPip = DateTime.Now;
+                Progresso = _progressoBuilder.ToString(); // Atualiza a cada Pip
+            }
+            return;
+        }
 
         var tempoDecorrido = (DateTime.Now - _ultimaAtualizacao).TotalSeconds;
 
         if (!EmPausa && tempoDecorrido >= 1)
         {
-            int segundosPassados = (int)tempoDecorrido;
-            for (int i = 0; i < segundosPassados; i++)
             {
-                _progressoBuilder.Append(new string(Caractere, Potencia));
-                _progressoBuilder.Append(' ');
+                int segundosPassados = (int)tempoDecorrido;
+                for (int i = 0; i < segundosPassados; i++)
+                {
+                    _progressoBuilder.Append(new string(Caractere, Potencia));
+                    _progressoBuilder.Append(' ');
+                }
+
+                TempoRestante -= segundosPassados;
+                _ultimaAtualizacao = DateTime.Now;
+
+                if (TempoRestante <= 0)
+                {
+                    Concluido = true;
+                    _inicioPip = DateTime.Now;
+                    _progressoBuilder.Append(" Aquecimento concluído!");
+                    Progresso = _progressoBuilder.ToString(); // Mensagem inicial
+                }
             }
 
-            TempoRestante -= segundosPassados;
-            _ultimaAtualizacao = DateTime.Now;
-
-            if (TempoRestante <= 0)
-            {
-                Concluido = true;
-                _progressoBuilder.Append("Aquecimento concluído");
-            }
-        }
-
-        Progresso = _progressoBuilder.ToString().Trim();
-    }
-
-    public int ProgressoPercentual
-    {
-        get
-        {
-            if (TempoTotal == 0) return 0;
-            return (int)((TempoTotal - TempoRestante) / (double)TempoTotal * 100);
+            Progresso = _progressoBuilder.ToString(); // Remove o Trim()
         }
     }
 

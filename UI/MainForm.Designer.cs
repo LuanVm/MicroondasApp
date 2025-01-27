@@ -18,7 +18,6 @@ namespace MicroondasApp
         }
 
         #region Windows Form Designer generated code
-        //t
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
@@ -43,9 +42,11 @@ namespace MicroondasApp
             this.imgListProgramas = new System.Windows.Forms.ImageList(this.components);
             this.lblTempoRestante = new System.Windows.Forms.Label();
             this.lblInstrucoes = new System.Windows.Forms.Label();
+            this.groupBoxCustomizados = new System.Windows.Forms.GroupBox();
             this.flowProgramas = new System.Windows.Forms.FlowLayoutPanel();
             this.groupBoxConfiguracoes.SuspendLayout();
             this.groupBoxProgramas.SuspendLayout();
+            this.groupBoxCustomizados.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnNovoPrograma
@@ -65,7 +66,7 @@ namespace MicroondasApp
             // 
             // txtTempo
             // 
-            this.txtTempo.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtTempo.Font = new System.Drawing.Font("Segoe UI", 12F);
             this.txtTempo.Location = new System.Drawing.Point(20, 50);
             this.txtTempo.Name = "txtTempo";
             this.txtTempo.Size = new System.Drawing.Size(150, 29);
@@ -184,7 +185,6 @@ namespace MicroondasApp
             this.lblExemploTempo.Size = new System.Drawing.Size(115, 15);
             this.lblExemploTempo.TabIndex = 7;
             this.lblExemploTempo.Text = "60 Segundos = 01:00";
-            this.lblExemploTempo.Click += new System.EventHandler(this.lblExemploTempo_Click);
             // 
             // lblExemploPotencia
             // 
@@ -198,7 +198,6 @@ namespace MicroondasApp
             // 
             // groupBoxProgramas
             // 
-            this.groupBoxProgramas.AutoSize = true;
             this.groupBoxProgramas.Controls.Add(this.btnProgramaFeijao);
             this.groupBoxProgramas.Controls.Add(this.btnProgramaFrango);
             this.groupBoxProgramas.Controls.Add(this.btnProgramaCarne);
@@ -306,28 +305,35 @@ namespace MicroondasApp
             this.lblInstrucoes.Text = "Instruções de acordo com o alimento selecionado.";
             this.lblInstrucoes.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // groupBoxCustomizados
+            // 
+            this.groupBoxCustomizados.Controls.Add(this.flowProgramas);
+            this.groupBoxCustomizados.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.groupBoxCustomizados.Location = new System.Drawing.Point(50, 568);
+            this.groupBoxCustomizados.Name = "groupBoxCustomizados";
+            this.groupBoxCustomizados.Size = new System.Drawing.Size(775, 208);
+            this.groupBoxCustomizados.TabIndex = 9;
+            this.groupBoxCustomizados.TabStop = false;
+            this.groupBoxCustomizados.Text = "Programas Customizados";
+            // 
             // flowProgramas
             // 
             this.flowProgramas.AutoScroll = true;
-            this.flowProgramas.FlowDirection = FlowDirection.LeftToRight;
-            this.flowProgramas.WrapContents = false;
-            this.flowProgramas.AutoSize = false;
             this.flowProgramas.BackColor = System.Drawing.SystemColors.Control;
-            this.flowProgramas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.flowProgramas.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-            this.flowProgramas.Location = new System.Drawing.Point(50, 568);
+            this.flowProgramas.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowProgramas.Location = new System.Drawing.Point(3, 25);
             this.flowProgramas.Name = "flowProgramas";
-            this.flowProgramas.Padding = new System.Windows.Forms.Padding(5);
-            this.flowProgramas.Size = new System.Drawing.Size(775, 200);
+            this.flowProgramas.Padding = new System.Windows.Forms.Padding(10);
+            this.flowProgramas.Size = new System.Drawing.Size(769, 180);
             this.flowProgramas.TabIndex = 0;
-            this.flowProgramas.Paint += new System.Windows.Forms.PaintEventHandler(this.flowProgramas_Paint);
+            this.flowProgramas.WrapContents = false;
             // 
             // MainForm
             // 
             this.AutoScroll = true;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(884, 830);
-            this.Controls.Add(this.flowProgramas);
+            this.Controls.Add(this.groupBoxCustomizados);
             this.Controls.Add(this.lblInstrucoes);
             this.Controls.Add(this.lblTempoRestante);
             this.Controls.Add(this.groupBoxProgramas);
@@ -337,7 +343,6 @@ namespace MicroondasApp
             this.Controls.Add(this.btnIniciar);
             this.Controls.Add(this.btnNovoPrograma);
             this.Controls.Add(this.lblMensagens);
-            this.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.Name = "MainForm";
             this.Text = "Microondas Digital";
@@ -345,6 +350,7 @@ namespace MicroondasApp
             this.groupBoxConfiguracoes.ResumeLayout(false);
             this.groupBoxConfiguracoes.PerformLayout();
             this.groupBoxProgramas.ResumeLayout(false);
+            this.groupBoxCustomizados.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -373,6 +379,7 @@ namespace MicroondasApp
         private System.Windows.Forms.ImageList imgListProgramas;
         private System.Windows.Forms.Label lblTempoRestante;
         private System.Windows.Forms.Label lblInstrucoes;
+        private System.Windows.Forms.GroupBox groupBoxCustomizados;
         private System.Windows.Forms.FlowLayoutPanel flowProgramas;
     }
 }

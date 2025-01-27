@@ -6,13 +6,29 @@ namespace MicroondasApp
     public partial class CustomProgramForm : Form
     {
         private readonly ControladorMicroondas _controlador;
-
-        public ProgramaAquecimento ProgramaCriado { get; private set; }
+        public ProgramaAquecimento NovoPrograma { get; private set; }
 
         public CustomProgramForm(ControladorMicroondas controlador)
         {
             InitializeComponent();
             _controlador = controlador;
+            ConfigurarValidacoes();
+
+            // Remover event handlers não utilizados
+            labelTempo.Click -= labelTempo_Click;
+            labelInstrucoes.Click -= labelInstrucoes_Click;
+        }
+
+        private void ConfigurarValidacoes()
+        {
+            txtTempo.KeyPress += ValidarEntradaNumerica;
+            txtPotencia.KeyPress += ValidarEntradaNumerica;
+        }
+
+        private void ValidarEntradaNumerica(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+                e.Handled = true;
         }
 
         private void btnSalvar_Click(object sender, EventArgs e)
@@ -22,24 +38,21 @@ namespace MicroondasApp
                 ValidarCamposObrigatorios();
                 char caractere = ValidarCaractere(txtCaractere.Text);
 
-                // 1. Atribuir o novo programa à propriedade ProgramaCriado
-                ProgramaCriado = new ProgramaAquecimento(
-                    nome: txtNome.Text,
-                    alimento: txtAlimento.Text,
-                    tempoSegundos: int.Parse(txtTempo.Text), // Nome do parâmetro corrigido
-                    potencia: int.Parse(txtPotencia.Text),
-                    caractereAquecimento: caractere,
-                    instrucoes: txtInstrucoes.Text,
-                    isCustomizado: true
+                NovoPrograma = new ProgramaAquecimento(
+                    txtNome.Text,
+                    txtAlimento.Text,
+                    int.Parse(txtTempo.Text),
+                    int.Parse(txtPotencia.Text),
+                    caractere,
+                    txtInstrucoes.Text,
+                    true
                 );
 
-                // 2. Passar o objeto correto para o controlador
-                _controlador.AdicionarProgramaCustomizado(ProgramaCriado);
-
+                _controlador.AdicionarProgramaCustomizado(NovoPrograma);
                 DialogResult = DialogResult.OK;
                 Close();
             }
-            catch (ArgumentException ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -52,17 +65,10 @@ namespace MicroondasApp
                 string.IsNullOrWhiteSpace(txtTempo.Text) ||
                 string.IsNullOrWhiteSpace(txtPotencia.Text) ||
                 string.IsNullOrWhiteSpace(txtCaractere.Text) ||
-                string.IsNullOrWhiteSpace(txtInstrucoes.Text)) // Adicione esta linha
+                string.IsNullOrWhiteSpace(txtInstrucoes.Text))
             {
                 throw new ArgumentException("Preencha todos os campos obrigatórios!");
             }
-
-            // Verificar se tempo e potência são números válidos
-            if (!int.TryParse(txtTempo.Text, out int tempo) || tempo < 1 || tempo > 6000)
-                throw new ArgumentException("Tempo inválido (1-6000 segundos)");
-
-            if (!int.TryParse(txtPotencia.Text, out int potencia) || potencia < 1 || potencia > 10)
-                throw new ArgumentException("Potência inválida (1-10)");
         }
 
         private char ValidarCaractere(string input)
@@ -81,16 +87,13 @@ namespace MicroondasApp
             return caractere;
         }
 
-        private void btnCancelar_Click(object sender, EventArgs e) => Close();
-
-        private void labelTempo_Click(object sender, EventArgs e)
+        private void btnCancelar_Click(object sender, EventArgs e)
         {
-
+            DialogResult = DialogResult.Cancel;
+            Close();
         }
 
-        private void labelInstrucoes_Click(object sender, EventArgs e)
-        {
-
-        }
+        private void labelTempo_Click(object sender, EventArgs e) { }
+        private void labelInstrucoes_Click(object sender, EventArgs e) { }
     }
 }
