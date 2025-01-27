@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 
-public class ProgramaRepository
+public class ProgramaRepository : IProgramaRepository
 {
     private readonly string _caminhoArquivo;
 

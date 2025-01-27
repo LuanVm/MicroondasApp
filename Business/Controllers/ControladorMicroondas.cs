@@ -4,16 +4,22 @@ using System.Linq;
 using System.Windows.Forms;
 using MicroondasApp;
 
+/// <summary>
+/// Controla as operações do micro-ondas, como iniciar, pausar e cancelar aquecimentos.
+/// </summary>
 public class ControladorMicroondas : IControladorMicroondas
 {
+    /// <summary>
+    /// Obtém o aquecimento atual em andamento.
+    /// </summary>
     public Aquecimento AquecimentoAtual { get; private set; }
     private readonly List<ProgramaAquecimento> _programasPredefinidos;
     private List<ProgramaAquecimento> _programasCustomizados;
-    private readonly ProgramaRepository _programaRepository;
+    private readonly IProgramaRepository _programaRepository;
 
-    public ControladorMicroondas()
+    public ControladorMicroondas(IProgramaRepository programaRepository)
     {
-        _programaRepository = new ProgramaRepository();
+        _programaRepository = programaRepository ?? throw new ArgumentNullException(nameof(programaRepository));
 
         _programasPredefinidos = new List<ProgramaAquecimento>
         {
@@ -38,20 +44,18 @@ public class ControladorMicroondas : IControladorMicroondas
     public List<ProgramaAquecimento> ListarProgramasCustomizados()
         => new List<ProgramaAquecimento>(_programasCustomizados);
 
+    /// <summary>
+    /// Inicia um aquecimento com o tempo e potência especificados.
+    /// </summary>
+    /// <param name="tempo">Tempo em segundos (1-120).</param>
+    /// <param name="potencia">Potência (1-10).</param>
+    /// <exception cref="ArgumentException">Lançada se tempo ou potência forem inválidos.</exception>
     public void IniciarAquecimento(int tempo, int potencia)
     {
-        if (AquecimentoAtual == null)
-        {
-            AquecimentoAtual = new Aquecimento(tempo, potencia);
-        }
-        else if (AquecimentoAtual.EmPausa)
-        {
-            AquecimentoAtual.EmPausa = false;
-        }
-        else if (!AquecimentoAtual.IsPredefinido)
-        {
-            AquecimentoAtual.AdicionarTempo(30);
-        }
+        Utilitarios.ValidarTempo(tempo);
+        Utilitarios.ValidarPotencia(potencia);
+
+        AquecimentoAtual = new Aquecimento(tempo, potencia);
     }
 
     public bool VerificarCaractereRepetido(char caractere)
@@ -125,6 +129,7 @@ public class ControladorMicroondas : IControladorMicroondas
             var programas = _programaRepository.CarregarProgramasCustomizados();
             programas = programas.Where(p => p != null).ToList();
 
+            // Validação movida para o Controlador
             var todosProgramas = _programasPredefinidos.Concat(programas).ToList();
             foreach (var programa in programas)
             {
@@ -177,11 +182,5 @@ public class ControladorMicroondas : IControladorMicroondas
             _programasCustomizados.Remove(programa);
             SalvarProgramasCustomizados();
         }
-    }
-
-    public class CharCaseInsensitiveComparer : IEqualityComparer<char>
-    {
-        public bool Equals(char x, char y) => char.ToLower(x) == char.ToLower(y);
-        public int GetHashCode(char c) => char.ToLower(c).GetHashCode();
     }
 }

@@ -21,9 +21,8 @@ A lógica central do micro-ondas é gerenciada pela classe `ControladorMicroonda
 
 ### 3. **SOLID e Design Patterns**
 - **Princípios SOLID**: O projeto segue os princípios SOLID, com ênfase na **Responsabilidade Única** e **Segregação de Interfaces**, para garantir que cada classe tenha uma única responsabilidade e que a interface `IControladorMicroondas` seja simples e eficiente.
-- **Factory Pattern**: Um padrão de fábrica pode ser aplicado para criar objetos de `Aquecimento` e `ProgramaAquecimento`, facilitando a extensão do sistema com novos tipos de programas.
-- **Strategy Pattern**: Poderia ser utilizado para permitir diferentes tipos de algoritmos de aquecimento, dependendo do alimento.
-- **Observer Pattern**: Pode ser aplicado para atualizar automaticamente a interface do usuário enquanto o aquecimento está em andamento, notificando quando o tempo de aquecimento muda.
+- **Injeção de Dependência**: O `ControladorMicroondas` recebe `ProgramaRepository` como uma dependência, facilitando testes e manutenção.
+- **Testes Unitários**: Implementados usando **xUnit** e **Moq** para garantir a cobertura das funcionalidades principais.
 
 ### 4. **Testes Unitários**
 Testes unitários foram implementados utilizando o **xUnit** e **Moq**, garantindo a cobertura das funcionalidades principais do sistema:

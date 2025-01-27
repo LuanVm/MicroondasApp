@@ -13,7 +13,7 @@ namespace MicroondasApp
         public MainForm()
         {
             InitializeComponent();
-            _controlador = new ControladorMicroondas();
+            _controlador = new ControladorMicroondas(new ProgramaRepository()); // Injeção de dependência
             ConfigurarTimer();
             ConfigurarValoresPadrao();
             VincularEventosProgramasPredefinidos();
