@@ -38,7 +38,7 @@ Os programas são armazenados em um arquivo JSON para garantir persistência ent
 Os programas customizados são salvos em um arquivo chamado `programas_customizados.json` localizado no diretório da aplicação. Isso garante que as configurações criadas pelo usuário sejam mantidas entre sessões.
 
 ### 6. **Testes Unitários**
-Testes unitários foram implementados utilizando **xUnit** e **Moq**, garantindo a cobertura das funcionalidades principais do sistema:
+Testes unitários foram implementados utilizando **MSTest** e **Moq**, garantindo a cobertura das funcionalidades principais do sistema:
 
 - **Testes de Aquecimento**: Verificam se o aquecimento é iniciado e pausado corretamente, bem como a atualização do progresso e conclusão.
 - **Testes de Programas Customizados**: Garantem que a validação e persistência de programas personalizados funcionam como esperado.
