@@ -309,17 +309,5 @@ namespace MicroondasApp
                 lblMensagens.Text = $"Erro: {ex.Message}";
             }
         }
-
-
-
-        private void lblExemploTempo_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void flowProgramas_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
     }
 }
