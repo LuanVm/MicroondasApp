@@ -1,7 +1,11 @@
 ﻿using System.Collections.Generic;
+using MicroondasApp.Business.Models;
 
-public interface IProgramaRepository
+namespace MicroondasApp.Business.Repositories
 {
-    void SalvarProgramasCustomizados(List<ProgramaAquecimento> programas);
-    List<ProgramaAquecimento> CarregarProgramasCustomizados();
+    public interface IProgramaRepository
+    {
+        void SalvarProgramasCustomizados(List<ProgramaAquecimento> programas);
+        List<ProgramaAquecimento> CarregarProgramasCustomizados();
+    }
 }

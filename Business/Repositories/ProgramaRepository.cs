@@ -2,43 +2,47 @@
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
+using MicroondasApp.Business.Models;
 
-public class ProgramaRepository : IProgramaRepository
+namespace MicroondasApp.Business.Repositories
 {
-    private readonly string _caminhoArquivo;
-
-    public ProgramaRepository()
+    public class ProgramaRepository : IProgramaRepository
     {
-        _caminhoArquivo = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "programas_customizados.json");
-    }
+        private readonly string _caminhoArquivo;
 
-    public void SalvarProgramasCustomizados(List<ProgramaAquecimento> programas)
-    {
-        try
+        public ProgramaRepository()
         {
-            var json = JsonConvert.SerializeObject(programas, Formatting.Indented);
-            File.WriteAllText(_caminhoArquivo, json);
+            _caminhoArquivo = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "programas_customizados.json");
         }
-        catch (Exception ex)
-        {
-            throw new Exception($"Erro ao salvar programas: {ex.Message}", ex);
-        }
-    }
 
-    public List<ProgramaAquecimento> CarregarProgramasCustomizados()
-    {
-        try
+        public void SalvarProgramasCustomizados(List<ProgramaAquecimento> programas)
         {
-            if (!File.Exists(_caminhoArquivo))
-                return new List<ProgramaAquecimento>();
-
-            var json = File.ReadAllText(_caminhoArquivo);
-            return JsonConvert.DeserializeObject<List<ProgramaAquecimento>>(json)
-                   ?? new List<ProgramaAquecimento>();
+            try
+            {
+                var json = JsonConvert.SerializeObject(programas, Formatting.Indented);
+                File.WriteAllText(_caminhoArquivo, json);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Erro ao salvar programas: {ex.Message}", ex);
+            }
         }
-        catch (Exception ex)
+
+        public List<ProgramaAquecimento> CarregarProgramasCustomizados()
         {
-            throw new Exception($"Erro ao carregar programas: {ex.Message}", ex);
+            try
+            {
+                if (!File.Exists(_caminhoArquivo))
+                    return new List<ProgramaAquecimento>();
+
+                var json = File.ReadAllText(_caminhoArquivo);
+                return JsonConvert.DeserializeObject<List<ProgramaAquecimento>>(json)
+                       ?? new List<ProgramaAquecimento>();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Erro ao carregar programas: {ex.Message}", ex);
+            }
         }
     }
 }

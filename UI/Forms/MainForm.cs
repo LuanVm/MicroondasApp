@@ -2,6 +2,10 @@
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using MicroondasApp.Business.Models;
+using MicroondasApp.Business.Repositories;
+using MicroondasApp.Business.Controllers;
+
 
 namespace MicroondasApp
 {
@@ -158,15 +162,35 @@ namespace MicroondasApp
 
         private void btnInicioRapido_Click(object sender, EventArgs e)
         {
-            _controlador.IniciarAquecimento(30, 10);
-            _timer.Start();
-            btnPausarCancelar.Enabled = true;
-            txtTempo.Text = "30";
-            txtPotencia.Text = "10";
-            txtTempo.Enabled = false;
-            txtPotencia.Enabled = false;
-            lblMensagens.Text = "Início rápido: 30s na potência 10";
+            try
+            {
+                if (_controlador.AquecimentoAtual != null && !_controlador.AquecimentoAtual.Concluido)
+                {
+                    // Adiciona 30 segundos ao tempo restante do aquecimento atual
+                    _controlador.AquecimentoAtual.TempoRestante += 30;
+                    lblMensagens.Text = "Início rápido: +30s adicionados.";
+                }
+                else
+                {
+                    // Inicia um novo aquecimento com 30 segundos na potência 10
+                    _controlador.IniciarAquecimento(30, 10);
+                    lblMensagens.Text = "Início rápido: novo aquecimento iniciado (30s, potência 10).";
+                }
+
+                // Atualiza a interface
+                _timer.Start();
+                btnPausarCancelar.Enabled = true;
+                txtTempo.Text = Aquecimento.FormatarTempo(_controlador.AquecimentoAtual.TempoRestante);
+                txtPotencia.Text = "10";
+                txtTempo.Enabled = false;
+                txtPotencia.Enabled = false;
+            }
+            catch (Exception ex)
+            {
+                lblMensagens.Text = $"Erro: {ex.Message}";
+            }
         }
+
 
         private void btnPausarCancelar_Click(object sender, EventArgs e)
         {
