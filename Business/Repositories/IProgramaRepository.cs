@@ -5,7 +5,7 @@ namespace MicroondasApp.Business.Repositories
 {
     public interface IProgramaRepository
     {
-        void SalvarProgramasCustomizados(List<ProgramaAquecimento> programas);
-        List<ProgramaAquecimento> CarregarProgramasCustomizados();
+        void SalvarProgramasCustomizados(List<IProgramaAquecimento> programas);
+        List<IProgramaAquecimento> CarregarProgramasCustomizados();
     }
 }

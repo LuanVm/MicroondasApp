@@ -15,7 +15,7 @@ namespace MicroondasApp.Business.Repositories
             _caminhoArquivo = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "programas_customizados.json");
         }
 
-        public void SalvarProgramasCustomizados(List<ProgramaAquecimento> programas)
+        public void SalvarProgramasCustomizados(List<IProgramaAquecimento> programas)
         {
             try
             {
@@ -28,16 +28,16 @@ namespace MicroondasApp.Business.Repositories
             }
         }
 
-        public List<ProgramaAquecimento> CarregarProgramasCustomizados()
+        public List<IProgramaAquecimento> CarregarProgramasCustomizados()
         {
             try
             {
                 if (!File.Exists(_caminhoArquivo))
-                    return new List<ProgramaAquecimento>();
+                    return new List<IProgramaAquecimento>();
 
                 var json = File.ReadAllText(_caminhoArquivo);
-                return JsonConvert.DeserializeObject<List<ProgramaAquecimento>>(json)
-                       ?? new List<ProgramaAquecimento>();
+                return JsonConvert.DeserializeObject<List<IProgramaAquecimento>>(json)
+                       ?? new List<IProgramaAquecimento>();
             }
             catch (Exception ex)
             {

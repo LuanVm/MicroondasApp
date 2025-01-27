@@ -95,12 +95,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Business\Models\Aquecimento.cs" />
+    <Compile Include="Business\Models\ProgramaAquecimento.cs" />
     <Compile Include="Business\Controllers\ControladorMicroondas.cs" />
     <Compile Include="Business\Controllers\IControladorMicroondas.cs" />
     <Compile Include="Business\Repositories\IProgramaRepository.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Business\Models\ProgramaAquecimento.cs" />
+    <Compile Include="Business\Models\IProgramaAquecimento.cs" />
     <Compile Include="Business\Repositories\ProgramaRepository.cs" />
     <Compile Include="Business\Utils\Utilitarios.cs" />
     <Compile Include="UI\Forms\CustomProgramForm.cs">

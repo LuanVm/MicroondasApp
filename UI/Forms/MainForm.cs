@@ -77,7 +77,7 @@ namespace MicroondasApp
             lblMensagens.Text = _controlador.AquecimentoAtual.Progresso;
             lblTempoRestante.Text = _controlador.AquecimentoAtual.Concluido
                 ? "00:00 Restantes"
-                : $"{Aquecimento.FormatarTempo(_controlador.AquecimentoAtual.TempoRestante)} Restantes";
+                : $"{ProgramaAquecimento.FormatarTempo(_controlador.AquecimentoAtual.TempoRestante)} Restantes";
 
             if (_controlador.AquecimentoAtual.Concluido)
             {
@@ -180,7 +180,7 @@ namespace MicroondasApp
                 // Atualiza a interface
                 _timer.Start();
                 btnPausarCancelar.Enabled = true;
-                txtTempo.Text = Aquecimento.FormatarTempo(_controlador.AquecimentoAtual.TempoRestante);
+                txtTempo.Text = ProgramaAquecimento.FormatarTempo(_controlador.AquecimentoAtual.TempoRestante);
                 txtPotencia.Text = "10";
                 txtTempo.Enabled = false;
                 txtPotencia.Enabled = false;
@@ -277,7 +277,7 @@ namespace MicroondasApp
         private void ProgramaCustomizado_Click(object sender, EventArgs e)
         {
             var botao = (Button)sender;
-            var programa = (ProgramaAquecimento)botao.Tag;
+            var programa = (IProgramaAquecimento)botao.Tag;
 
             if (programa == null)
             {

@@ -21,6 +21,7 @@ namespace MicroondasApp
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.btnNovoPrograma = new System.Windows.Forms.Button();
             this.txtTempo = new System.Windows.Forms.TextBox();
             this.txtPotencia = new System.Windows.Forms.TextBox();
@@ -332,6 +333,7 @@ namespace MicroondasApp
             // 
             this.AutoScroll = true;
             this.AutoSize = true;
+            this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(884, 830);
             this.Controls.Add(this.groupBoxCustomizados);
             this.Controls.Add(this.lblInstrucoes);
@@ -344,6 +346,7 @@ namespace MicroondasApp
             this.Controls.Add(this.btnNovoPrograma);
             this.Controls.Add(this.lblMensagens);
             this.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
             this.Text = "Microondas Digital";
             this.Load += new System.EventHandler(this.MainForm_Load);

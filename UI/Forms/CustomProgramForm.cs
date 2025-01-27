@@ -9,7 +9,7 @@ namespace MicroondasApp
     public partial class CustomProgramForm : Form
     {
         private readonly ControladorMicroondas _controlador;
-        public ProgramaAquecimento NovoPrograma { get; private set; }
+        public IProgramaAquecimento NovoPrograma { get; private set; }
 
         public CustomProgramForm(ControladorMicroondas controlador)
         {
@@ -41,7 +41,7 @@ namespace MicroondasApp
                 ValidarCamposObrigatorios();
                 char caractere = ValidarCaractere(txtCaractere.Text);
 
-                NovoPrograma = new ProgramaAquecimento(
+                NovoPrograma = new IProgramaAquecimento(
                     txtNome.Text,
                     txtAlimento.Text,
                     int.Parse(txtTempo.Text),

@@ -18,37 +18,37 @@ using MicroondasApp.Business.Utils;
         /// <summary>
         /// Obtém o aquecimento atual em andamento.
         /// </summary>
-        public Aquecimento AquecimentoAtual { get; private set; }
-        private readonly List<ProgramaAquecimento> _programasPredefinidos;
-        private List<ProgramaAquecimento> _programasCustomizados;
+        public ProgramaAquecimento AquecimentoAtual { get; private set; }
+        private readonly List<IProgramaAquecimento> _programasPredefinidos;
+        private List<IProgramaAquecimento> _programasCustomizados;
         private readonly IProgramaRepository _programaRepository;
 
         public ControladorMicroondas(IProgramaRepository programaRepository)
         {
             _programaRepository = programaRepository ?? throw new ArgumentNullException(nameof(programaRepository));
 
-            _programasPredefinidos = new List<ProgramaAquecimento>
+            _programasPredefinidos = new List<IProgramaAquecimento>
             {
-                new ProgramaAquecimento("Pipoca", "Pipoca (de micro-ondas)", 180, 7, '*',
+                new IProgramaAquecimento("Pipoca", "Pipoca (de micro-ondas)", 180, 7, '*',
                     "Observar o barulho de estouros do milho, caso houver um intervalo de mais de 10 segundos entre um estouro e outro, interrompa o aquecimento."),
-                new ProgramaAquecimento("Leite", "Leite", 300, 5, '~',
+                new IProgramaAquecimento("Leite", "Leite", 300, 5, '~',
                     "Cuidado com aquecimento de líquidos, o choque térmico aliado ao movimento do recipiente pode causar fervura imediata causando risco de queimaduras."),
-                new ProgramaAquecimento("Carnes", "Carne em pedaço ou fatias", 840, 4, '#',
+                new IProgramaAquecimento("Carnes", "Carne em pedaço ou fatias", 840, 4, '#',
                     "Interrompa o processo na metade e vire o conteúdo com a parte de baixo para cima para o descongelamento uniforme."),
-                new ProgramaAquecimento("Frango", "Frango (qualquer corte)", 480, 7, '@',
+                new IProgramaAquecimento("Frango", "Frango (qualquer corte)", 480, 7, '@',
                     "Interrompa o processo na metade e vire o conteúdo com a parte de baixo para cima para o descongelamento uniforme."),
-                new ProgramaAquecimento("Feijão", "Feijão congelado", 480, 9, '&',
+                new IProgramaAquecimento("Feijão", "Feijão congelado", 480, 9, '&',
                     "Deixe o recipiente destampado e em casos de plástico, cuidado ao retirar o recipiente pois o mesmo pode perder resistência em altas temperaturas.")
             };
 
-            _programasCustomizados = CarregarProgramasCustomizados() ?? new List<ProgramaAquecimento>();
+            _programasCustomizados = CarregarProgramasCustomizados() ?? new List<IProgramaAquecimento>();
         }
 
-        public List<ProgramaAquecimento> ListarProgramasPredefinidos()
-            => new List<ProgramaAquecimento>(_programasPredefinidos);
+        public List<IProgramaAquecimento> ListarProgramasPredefinidos()
+            => new List<IProgramaAquecimento>(_programasPredefinidos);
 
-        public List<ProgramaAquecimento> ListarProgramasCustomizados()
-            => new List<ProgramaAquecimento>(_programasCustomizados);
+        public List<IProgramaAquecimento> ListarProgramasCustomizados()
+            => new List<IProgramaAquecimento>(_programasCustomizados);
 
         /// <summary>
         /// Inicia um aquecimento com o tempo e potência especificados.
@@ -61,7 +61,7 @@ using MicroondasApp.Business.Utils;
             Utilitarios.ValidarTempo(tempo);
             Utilitarios.ValidarPotencia(potencia);
 
-            AquecimentoAtual = new Aquecimento(tempo, potencia);
+            AquecimentoAtual = new ProgramaAquecimento(tempo, potencia);
         }
 
         public bool VerificarCaractereRepetido(char caractere)
@@ -76,7 +76,7 @@ using MicroondasApp.Business.Utils;
             var programa = _programasPredefinidos.FirstOrDefault(p => p.Nome == nomePrograma);
             if (programa != null)
             {
-                AquecimentoAtual = new Aquecimento(
+                AquecimentoAtual = new ProgramaAquecimento(
                     programa.TempoSegundos,
                     programa.Potencia,
                     isPredefinido: true,
@@ -90,7 +90,7 @@ using MicroondasApp.Business.Utils;
             var programa = _programasCustomizados.FirstOrDefault(p => p.Nome == nomePrograma);
             if (programa != null)
             {
-                AquecimentoAtual = new Aquecimento(
+                AquecimentoAtual = new ProgramaAquecimento(
                     programa.TempoSegundos,
                     programa.Potencia,
                     isPredefinido: true,
@@ -128,7 +128,7 @@ using MicroondasApp.Business.Utils;
             }
         }
 
-        public List<ProgramaAquecimento> CarregarProgramasCustomizados()
+        public List<IProgramaAquecimento> CarregarProgramasCustomizados()
         {
             try
             {
@@ -144,7 +144,7 @@ using MicroondasApp.Business.Utils;
                         char.ToLower(p.CaractereAquecimento) == char.ToLower(programa.CaractereAquecimento)))
                     {
                         MessageBox.Show($"Caractere '{programa.CaractereAquecimento}' em conflito!");
-                        return new List<ProgramaAquecimento>();
+                        return new List<IProgramaAquecimento>();
                     }
                 }
 
@@ -153,16 +153,16 @@ using MicroondasApp.Business.Utils;
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-                return new List<ProgramaAquecimento>();
+                return new List<IProgramaAquecimento>();
             }
         }
 
         public void AtualizarListaCustomizados()
         {
-            _programasCustomizados = CarregarProgramasCustomizados() ?? new List<ProgramaAquecimento>();
+            _programasCustomizados = CarregarProgramasCustomizados() ?? new List<IProgramaAquecimento>();
         }
 
-        public void AdicionarProgramaCustomizado(ProgramaAquecimento programa)
+        public void AdicionarProgramaCustomizado(IProgramaAquecimento programa)
         {
             if (programa == null)
                 throw new ArgumentNullException("Programa não pode ser nulo");
